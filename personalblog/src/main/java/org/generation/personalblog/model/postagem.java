@@ -18,7 +18,7 @@ public class postagem {
 
 	@Id // Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto_incrment
-	private Long id; // bigint
+	private Long id;
 	
 	@NotNull
 	@Size(max=100)
