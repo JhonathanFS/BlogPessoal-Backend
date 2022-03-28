@@ -6,11 +6,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="tb_postagens")
@@ -30,6 +33,10 @@ public class postagem {
 	
 	@UpdateTimestamp
 	private LocalDateTime data;
+	
+	@ManyToOne
+	@JsonIgnoreProperties("Postagens")
+	private tema tema;
 	
 	public Long getId() {
 		return id;
@@ -61,6 +68,14 @@ public class postagem {
 
 	public void setData(LocalDateTime data) {
 		this.data = data;
+	}
+
+	public tema getTema() {
+		return tema;
+	}
+
+	public void setTema(tema tema) {
+		this.tema = tema;
 	}
 
 }

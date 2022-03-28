@@ -1,0 +1,18 @@
+package org.generation.personalblog.controller;
+
+import org.generation.personalblog.repository.temaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/temas")
+@CrossOrigin(origins="*")
+public class temaController {
+	
+	@Autowired
+	private temaRepository repository;
+	
+	
+}

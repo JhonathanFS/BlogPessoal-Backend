@@ -1,0 +1,15 @@
+package org.generation.personalblog.repository;
+
+import java.util.List;
+
+import org.generation.personalblog.model.tema;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@Repository
+@CrossOrigin(origins="*", allowedHeaders = "*")	
+public interface temaRepository extends JpaRepository<tema, Long>{
+
+	public List<tema> findAllByNomeContainingIgnoreCase(String nome);	
+}
