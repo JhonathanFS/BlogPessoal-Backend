@@ -11,6 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -28,6 +29,7 @@ public class Usuario {
 	private String usuario;
 	
 	@NotNull
+	@Size(min=8)
 	private String senha;
 	
 	private String foto;

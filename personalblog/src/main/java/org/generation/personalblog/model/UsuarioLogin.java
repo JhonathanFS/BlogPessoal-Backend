@@ -13,7 +13,6 @@ public class UsuarioLogin { //model para conseguir criar um objeto para logar
 	private String foto;
 	
 	private String token;
-
 	
 	public Long getId() {
 		return id;

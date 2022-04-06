@@ -1,0 +1,85 @@
+package org.generation.personalblog.service;
+
+import java.nio.charset.Charset;
+import java.util.Optional;
+
+import org.apache.commons.codec.binary.Base64;
+import org.generation.personalblog.model.Usuario;
+import org.generation.personalblog.model.UsuarioLogin;
+import org.generation.personalblog.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+@Service // mostrando que é uma classe Service (os metodos do controller de forma segura)
+public class UsuarioService {
+
+	@Autowired
+	private UsuarioRepository repository;
+	
+	
+	private String criptografarSenha(String senha) { //Função para criptografado
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); // Codificador 
+		return encoder.encode(senha); // returna a senha criptografada
+	}
+
+	public Optional<Usuario>cadastrarUsuario(Usuario usuario){ //Função para cadastrar 
+	// ^ public porque seu uso será em outras class
+		if(repository.findByUsuario(usuario.getUsuario()).isPresent()) { //Verifica a presença daquele objeto usuario	
+			return Optional.empty(); // Caso sim, returna vazio
+		}
+			
+		usuario.setSenha(criptografarSenha(usuario.getSenha())); // Salva senha do objeto criptografado
+		return Optional.of(repository.save(usuario)); // salva objeto no banco após a senha criptografada
+	}
+	
+	private boolean compararSenhas(String senhaDigitada, String senhaDoBanco) { //Função para comparar as senhas
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); 
+		
+		return encoder.matches(senhaDigitada, senhaDoBanco);
+	}
+	
+	private String geradorBasicToken(String usuario, String senha) {
+
+		String token = usuario + ":" + senha;
+		byte[] tokenBase64 = Base64.encodeBase64(token.getBytes(Charset.forName("US-ASCII")));
+		return "Basic " + new String(tokenBase64);
+	}
+	
+	public Optional<UsuarioLogin> autenticarUsuario(Optional<UsuarioLogin> usuarioLogin){ //Função para Logar
+		
+		Optional<Usuario> usuario = repository.findByUsuario(usuarioLogin.get().getUsuario()); //Verificação se usuario existe
+		if(usuario.isPresent()) { // caso exista
+			if(compararSenhas(usuarioLogin.get().getSenha(), usuario.get().getSenha())){ //Função para comparar as senhas Objeto/Banco
+				usuarioLogin.get().setId(usuario.get().getId()); // Comparação de ID
+				usuarioLogin.get().setNome(usuario.get().getNome()); // Comparação de Nome
+				usuarioLogin.get().setUsuario(usuario.get().getUsuario()); // Comparação de Usuario
+				usuarioLogin.get().setToken(geradorBasicToken(usuarioLogin.get().getUsuario(), usuarioLogin.get().getSenha())); //
+				usuarioLogin.get().setSenha(usuario.get().getSenha()); //
+	
+				return usuarioLogin;
+			}
+		}
+		return Optional.empty();  // Caso não tenha, returna vazio
+	}
+	
+	public Optional<Usuario> atualizarUsuario(Usuario usuario) {
+
+		if (repository.findById(usuario.getId()).isPresent()) {
+			Optional<Usuario> buscarUsuario = repository.findByUsuario(usuario.getUsuario());
+			if (buscarUsuario.isPresent()) {				
+				if (buscarUsuario.get().getId() != usuario.getId())
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
+				
+			}
+			
+			usuario.setSenha(criptografarSenha(usuario.getSenha()));
+			return Optional.of(repository.save(usuario));
+			
+		}	
+		
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado!", null);		
+	}
+}
