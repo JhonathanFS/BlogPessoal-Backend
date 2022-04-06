@@ -17,10 +17,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="tb_postagens")
-public class postagem {
+public class Postagem {
 
-	@Id // Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto_incrment
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@NotNull
@@ -35,8 +35,12 @@ public class postagem {
 	private LocalDateTime data;
 	
 	@ManyToOne
-	@JsonIgnoreProperties("Postagens")
-	private tema tema;
+	@JsonIgnoreProperties("postagens")
+	private Tema tema;
+	
+	@ManyToOne
+	@JsonIgnoreProperties("postagens")
+	private Usuario usuario;
 	
 	public Long getId() {
 		return id;
@@ -70,11 +74,11 @@ public class postagem {
 		this.data = data;
 	}
 
-	public tema getTema() {
+	public Tema getTema() {
 		return tema;
 	}
 
-	public void setTema(tema tema) {
+	public void setTema(Tema tema) {
 		this.tema = tema;
 	}
 

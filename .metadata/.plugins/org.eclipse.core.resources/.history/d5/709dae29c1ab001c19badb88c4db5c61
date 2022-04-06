@@ -1,5 +1,0 @@
-package org.generation.personalblog.repository;
-
-public class postagemRepository extends JpaRepository<postagem, Long> 	{
-
-}

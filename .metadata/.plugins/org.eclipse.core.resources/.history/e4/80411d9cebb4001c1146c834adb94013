@@ -1,0 +1,32 @@
+package org.generation.personalblog.security;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@EnableWebSecurity
+public class BasicSecurityConfig extends WebSecurityConfigurerAdapter{
+
+	@Autowired //Escopo local para uso
+	private UserDetailsService userDetailsService;
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) //alias = apelido
+	throws Exception { //Exececao de usuario direto
+		auth.userDetailsService(userDetailsService);
+		auth.inMemoryAuthentication()
+		.withUser("root") //login
+		.password(passwordEnconder().encode("root")) // Senha Codificada
+		.authorities("ROLE_USER"); // Função Usuario equivale nivel de usuario
+	}
+	
+	@Bean //Escopo global no repository inteiro
+	public PasswordEncoder passwordEnconder() {
+		return new BCryptPasswordEncoder();
+	}
+}

@@ -1,0 +1,52 @@
+package org.generation.personalblog.security;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@Configuration	
+@EnableWebSecurity
+public class BasicSecurityConfig extends WebSecurityConfigurerAdapter{ // trás métodos de segurança preexistente
+
+	@Autowired //Escopo local para uso
+	private UserDetailsService userDetailsService;
+	
+	@Bean //Escopo global no repository 
+	public PasswordEncoder passwordEnconder() {  //inteiro que estará cryptografado
+		return new BCryptPasswordEncoder();
+	}
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) //Criação do metodo de autenticação (alias = apelido)
+	throws Exception { //Exececao de usuario direto
+		auth.userDetailsService(userDetailsService); // Metodo de autenticação
+		auth.inMemoryAuthentication() // usuario em memoria
+		.withUser("root") //login
+		.password(passwordEnconder().encode("root")) // Senha Codificada
+		.authorities("ROLE_USER"); // Função Usuario equivale nivel de usuario de autorização
+	}
+	
+	@Override
+	protected void configure(HttpSecurity http) //a rota de permição de login/cadastrar
+	throws Exception { //Execeao de rotas não criptogafadas
+		http.authorizeHttpRequests() // para autorizar um metodo Http (requisições)	
+		.antMatchers("usuario/logar").permitAll() // Permissão de todas as requisições por usuario/logar
+		.antMatchers("cadastrar/cadastrar").permitAll() // Permissão de todas as requisições por cadastrar/cadastrar
+		.antMatchers(HttpMethod.OPTIONS).permitAll()
+		.anyRequest().authenticated() // todos os pedidos devem se autenticados
+		.and().httpBasic() // com o BasicSecurity
+		.and().sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and().cors()
+		.and().csrf().disable();
+	}
+}

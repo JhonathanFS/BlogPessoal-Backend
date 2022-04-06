@@ -1,9 +1,9 @@
-package org.generation.personalblog.controller;
+	package org.generation.personalblog.controller;
 
 import java.util.List;
 
-import org.generation.personalblog.model.tema;
-import org.generation.personalblog.repository.temaRepository;
+import org.generation.personalblog.model.Tema;
+import org.generation.personalblog.repository.TemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,36 +20,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/temas")
 @CrossOrigin(origins="*", allowedHeaders = "*")
-public class temaController {
+public class TemaController {
 	
 	@Autowired
-	private temaRepository repository;
+	private TemaRepository repository;
 	
 	@GetMapping
-	public ResponseEntity <List<tema>> GetAll(){
+	public ResponseEntity <List<Tema>> GetAll(){
 		return ResponseEntity.ok(repository.findAll());
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<tema> GetById(@PathVariable Long id){
+	@GetMapping("/{id}")	
+	public ResponseEntity<Tema> GetById(@PathVariable Long id){
 		return repository.findById(id)
 				.map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
 	@GetMapping("/nome/{nome}")
-	public ResponseEntity<List<tema>> GetbyTitulo (@PathVariable String nome){
+	public ResponseEntity<List<Tema>> GetbyTitulo (@PathVariable String nome){
 		return ResponseEntity.ok(repository.findAllByNomeContainingIgnoreCase(nome));
 	}
 
 	@PostMapping
-	public ResponseEntity<tema> post (@RequestBody tema tema){
+	public ResponseEntity<Tema> post (@RequestBody Tema tema){
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(repository.save(tema));
 	}
 
 	@PutMapping
-	public ResponseEntity<tema> put (@RequestBody tema tema){
+	public ResponseEntity<Tema> put (@RequestBody Tema tema){
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(repository.save(tema));
 	}

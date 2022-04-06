@@ -1,12 +1,12 @@
 package org.generation.personalblog.repository;
 
 import java.util.List;
-import org.generation.personalblog.model.postagem;
+import org.generation.personalblog.model.Postagem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface postagemRepository extends JpaRepository <postagem, Long> 	{
+public interface PostagemRepository extends JpaRepository <Postagem, Long> 	{
 	
-	public List<postagem> findAllByTituloContainingIgnoreCase (String titulo);
+	public List<Postagem> findAllByTituloContainingIgnoreCase (String titulo);
 }
