@@ -51,7 +51,7 @@ public class UsuarioController {
 		return service.autenticarUsuario(user)
 			.map(resp -> ResponseEntity.ok(resp))
 			.orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-	}		
+	}			
 	
 	@PutMapping("/atualizar")
 	public ResponseEntity<Usuario> putUsuario(@Valid @RequestBody Usuario usuario){		

@@ -62,7 +62,7 @@ public class UserDetailsImpl implements UserDetails { // Classes de implentaçã
 	
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return true;
+		return false;
 	}
 	
 	@Override

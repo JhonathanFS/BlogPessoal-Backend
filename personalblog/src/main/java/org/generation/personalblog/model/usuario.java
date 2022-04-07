@@ -30,7 +30,7 @@ public class Usuario {
 	
 	@NotNull
 	@Size(min=8)
-	private String senha;
+	private String senha;	
 	
 	private String foto;
 	
