@@ -1,4 +1,4 @@
-package br.org.generation.personalblog.repository;
+package org.generation.personalblog.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Optional;
 
+import org.generation.personalblog.model.Usuario;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
-import br.org.generation.blogpessoal.model.Usuario;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -27,13 +27,13 @@ public class UsuarioRepositoryTest {
 	@BeforeAll
 	void start() {
 		
-		repository.save(new Usuario(0L, "Igor da Silva", "igor@igor.com","123","linkdefoto"));
+		repository.save(new Usuario(0L, "Igor da Silva", "igor@igor.com","12345678","linkdefoto"));
 		
-		repository.save(new Usuario(0L, "Gabriel Silva", "gabriel@gabriel.com","123","linkdefoto"));
+		repository.save(new Usuario(0L, "Gabriel Silva", "gabriel@gabriel.com","12345678","linkdefoto"));
 		
-		repository.save(new Usuario(0L, "Catarina Silva", "catarina@catarina.com","123","linkdefoto"));
+		repository.save(new Usuario(0L, "Catarina Silva", "catarina@catarina.com","12345678","linkdefoto"));
 		
-		repository.save(new Usuario(0L, "Isabela Caetano", "isabela@isabela.com","123","linkdefoto"));
+		repository.save(new Usuario(0L, "Isabela Caetano", "isabela@isabela.com","12345678","linkdefoto"));
 		
 	}
 	

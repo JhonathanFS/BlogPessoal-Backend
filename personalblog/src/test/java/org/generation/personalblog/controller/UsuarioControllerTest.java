@@ -1,9 +1,11 @@
-package br.org.generation.personalblog.controller;
+package org.generation.personalblog.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
 
+import org.generation.personalblog.model.Usuario;
+import org.generation.personalblog.service.UsuarioService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -19,8 +21,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import br.org.generation.blogpessoal.model.Usuario;
-import br.org.generation.blogpessoal.service.UsuarioService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -39,7 +39,8 @@ public class UsuarioControllerTest {
 	@DisplayName("Cadastrar Um Usuario")
 	public void deveCriarUmUsuario() {
 		
-		HttpEntity<Usuario>requisicao =new HttpEntity<Usuario>(new Usuario(0L, "Igor da Silva", "igor@igor.com", "123", "linkdefoto"));
+		HttpEntity<Usuario>requisicao =new HttpEntity<Usuario>
+		(new Usuario(0L, "Igor da Silva", "igor@igor.com", "12345678", "linkdefoto"));
 		
 		ResponseEntity<Usuario>resposta=testRestTemplate
 				.exchange("/usuarios/cadastrar", HttpMethod.POST, requisicao, Usuario.class);
@@ -55,10 +56,10 @@ public class UsuarioControllerTest {
 	public void naoDeveDuplicarUsuario() {
 		
 		usuarioService.cadastrarUsuario(new Usuario(0L,
-				"Gabriel Silva", "gabriel@gabriel.com","123","linkdefoto"));
+				"Gabriel Silva", "gabriel@gabriel.com","12345678","linkdefoto"));
 		
 		HttpEntity<Usuario>requisicao=new HttpEntity<Usuario>(new Usuario(0L,
-				"Gabriel Silva", "gabriel@gabriel.com","123","linkdefoto"));
+				"Gabriel Silva", "gabriel@gabriel.com","12345678","linkdefoto"));
 		
 		ResponseEntity<Usuario> resposta=testRestTemplate
 				.exchange("/usuarios/cadastrar", HttpMethod.POST, requisicao, Usuario.class);
@@ -73,10 +74,10 @@ public class UsuarioControllerTest {
 	public void deveAtualizarUmUsuario() {
 		
 		Optional<Usuario>usuarioCreate=usuarioService.cadastrarUsuario(new Usuario(0L,
-				"Catarina Silva", "catarina@catarina.com","123","linkdefoto"));
+				"Catarina Silva", "catarina@catarina.com","12345678","linkdefoto"));
 		
 		Usuario usuarioUpdate=new Usuario(usuarioCreate.get().getId(),
-				"Catarina Silva","catarina@catarina.com","123","linkdefoto");
+				"Catarina Silva","catarina@catarina.com","12345678","linkdefoto");
 		
 		HttpEntity<Usuario>requisicao=new HttpEntity<Usuario>(usuarioUpdate);
 		
@@ -95,17 +96,14 @@ public class UsuarioControllerTest {
 	public void deveMostrarTodosUsuarios() {
 		
 		usuarioService.cadastrarUsuario(new Usuario(0L,
-				"Isabela Caetano", "isabela@isabela.com","123","linkdefoto"));
+				"Isabela Caetano", "isabela@isabela.com","12345678","linkdefoto"));
 		
 		usuarioService.cadastrarUsuario(new Usuario(0L,
-				"Gabriel Silva", "gabriel@gabriel.com","123","linkdefoto"));
+				"Gabriel Silva", "gabriel@gabriel.com","12345678","linkdefoto"));
 		
 		ResponseEntity<String> resposta= testRestTemplate
 				.withBasicAuth("root", "root")
 				.exchange("/usuarios/all", HttpMethod.GET, null, String.class);
 		assertEquals(HttpStatus.OK, resposta.getStatusCode());
 	}
-	
-	
-	
 }
