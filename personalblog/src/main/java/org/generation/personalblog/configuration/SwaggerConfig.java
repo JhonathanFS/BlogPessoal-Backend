@@ -32,7 +32,7 @@ public class SwaggerConfig {
 			.url("https://github.com/JhonathanFS")
 			.email("jhonathan.fs@hotmail.com")))
 		.externalDocs(new ExternalDocumentation()
-			.description("API RESTful de um Blog Pessoal")	
+			.description("Github")	
 			.url("https://github.com/JhonathanFS/BlogPessoal"));
 	}
 	
