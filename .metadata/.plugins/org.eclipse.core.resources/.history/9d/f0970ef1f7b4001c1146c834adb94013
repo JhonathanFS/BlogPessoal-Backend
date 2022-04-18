@@ -1,5 +1,0 @@
-package org.generation.personalblog.security;
-
-public class UserDetailsServiceImpl {
-
-}
