@@ -41,9 +41,9 @@ public class UsuarioService {
 		return encoder.matches(senhaDigitada, senhaDoBanco); //Compara se são iguais
 	}
 	
-	private String geradorBasicToken(String usuario, String senha) { //Função para criar Token
+	private String geradorBasicToken(String email, String password) { //Função para criar Token
 
-		String token = usuario + ":" + senha; //Como os atributos seram usados
+		String token = email + ":" + password; //Como os atributos seram usados
 		byte[] tokenBase64 = Base64.encodeBase64(token.getBytes(Charset.forName("US-ASCII"))); //Criação de token e tecnologia usando Base64
 		return "Basic " + new String(tokenBase64); //Returna o Head(token) em forma de String
 	}
@@ -51,14 +51,17 @@ public class UsuarioService {
 	public Optional<UsuarioLogin> autenticarUsuario(Optional<UsuarioLogin> usuarioLogin){ //Função para Logar
 	// ^ public porque seu uso será em outras class
 		Optional<Usuario> usuario = repository.findByUsuario(usuarioLogin.get().getUsuario()); //Verificação se usuario existe
+		
 		if(usuario.isPresent()) { //Caso exista
 			if(compararSenhas(usuarioLogin.get().getSenha(), usuario.get().getSenha())){
 				//Trás a função para comparar as senhas Objeto/Banco
 				//Se sim faz os getters e setters atribuindo no UsuarioLogin(Objeto)
+				usuarioLogin.get().setToken(geradorBasicToken(usuarioLogin.get().getUsuario(), usuarioLogin.get().getSenha())); //Trazendo o metodo de criação de token
 				usuarioLogin.get().setId(usuario.get().getId()); //Comparação de ID atribuindo em Objeto
 				usuarioLogin.get().setNome(usuario.get().getNome()); //Comparação de Nome atribuindo em Objeto
 				usuarioLogin.get().setUsuario(usuario.get().getUsuario()); //Comparação de Usuario atribuindo em Objeto
-				usuarioLogin.get().setToken(geradorBasicToken(usuarioLogin.get().getUsuario(), usuarioLogin.get().getSenha())); //Trazendo o metodo de criação de token
+				usuarioLogin.get().setTipo(usuario.get().getTipo());
+				usuarioLogin.get().setFoto(usuario.get().getFoto());
 				//Token atribuindo em Objeto
 				usuarioLogin.get().setSenha(usuario.get().getSenha()); //Comparação de Nome atribuindo em Objeto
 	

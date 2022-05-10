@@ -45,5 +45,13 @@ public class Tema {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
+	public List<Postagem> getPostagens() {
+		return postagens;
+	}
+
+	public void setPostagens(List<Postagem> postagens) {
+		this.postagens = postagens;
+	}
 	
 }
